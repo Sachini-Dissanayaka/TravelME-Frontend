@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "1057921993182",
+    "firebase_url": "https://travelme-8fd91.firebaseio.com",
+    "project_id": "travelme-8fd91",
+    "storage_bucket": "travelme-8fd91.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1057921993182:android:b81e76d8887e076219b54f",
+        "android_client_info": {
+          "package_name": "com.example.tour_planner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1057921993182-gk1k1gf8lgjclnfbljlgivkhm4sm1oue.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tour_planner",
+            "certificate_hash": "62d831a453f02ccd6f29a6f662bf8fc2fac2fce0"
+          }
+        },
+        {
+          "client_id": "1057921993182-aekq8chk0f5c9hk2lm7fm04c84gj4h72.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_V9U4DkJ9xrEXno7OhsoCTHY5puFU3c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1057921993182-aekq8chk0f5c9hk2lm7fm04c84gj4h72.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

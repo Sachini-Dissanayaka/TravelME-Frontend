@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'sign_in.dart';
+import 'first_screen.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -10,14 +11,23 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: new Text('TravelME'),
+        backgroundColor: Colors.purple,
+      ),
       body: Container(
-        color: Colors.white,
+        color: Colors.purple[100],
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              new Padding(padding: EdgeInsets.only(top: 50.0)),
+                      new Text('TravelME',
+                      style: new TextStyle(color: Colors.purple, fontSize: 30.0),),
+                      new Padding(padding: EdgeInsets.only(top: 50.0)),
               FlutterLogo(size: 150),
+              // Image(image: AssetImage("assets/logo.jpg"), height: 200, width: 200,),
               SizedBox(height: 50),
               _signInButton(),
             ],
@@ -68,11 +78,3 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class FirstScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(color: Colors.blue[100]),
-    );
-  }
-}

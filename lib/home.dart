@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'Trip.dart';
 
 class Home extends StatelessWidget {
   final format = DateFormat("yyyy-MM-dd");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Page'),
-        backgroundColor: Colors.purple,
-      ),
       body: Container(
           padding: const EdgeInsets.all(30.0),
           decoration: BoxDecoration(
@@ -98,7 +96,26 @@ class Home extends StatelessWidget {
                 fontSize: 15.0,
               ),
             ),
-          
+            SizedBox(height: 40),
+            RaisedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Trip()),
+                );
+              },
+              color: Colors.purple,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Start',
+                  style: TextStyle(fontSize: 25, color: Colors.white),
+                ),
+              ),
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(40)),
+            ),
           ]))),
     );
   }

@@ -1,7 +1,9 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'sign_in.dart';
 import 'HeadOne.dart';
+import 'home.dart';
 
 class FirstScreen extends StatelessWidget {
   @override
@@ -9,27 +11,20 @@ class FirstScreen extends StatelessWidget {
     return Scaffold(
       appBar: new AppBar(
         title: new Text('TravelME'),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.green[900],
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NavHome()),
+            MaterialPageRoute(builder: (context) => Home()),
           );
         },
-        label: Text('Home'),
-        icon: Icon(Icons.home),
-        backgroundColor: Colors.deepPurple,
+        child: Icon(Icons.navigation),
+        backgroundColor: Colors.green[800],
       ),
       body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [Colors.purple[50], Colors.purple[100]],
-          ),
-        ),
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -37,47 +32,49 @@ class FirstScreen extends StatelessWidget {
             children: <Widget>[
               new Text(
                 'My Profile',
-                style: new TextStyle(color: Colors.purple, fontSize: 25.0),
+                style: new TextStyle(color: Colors.green, fontSize: 35.0,fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 40),
               CircleAvatar(
                 backgroundImage: NetworkImage(
                   imageUrl,
                 ),
-                radius: 60,
+                radius: 50,
                 backgroundColor: Colors.transparent,
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 30),
               Text(
                 'NAME',
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: Colors.black54),
               ),
+              SizedBox(height: 5),
               Text(
                 name,
                 style: TextStyle(
                     fontSize: 25,
-                    color: Colors.deepPurple,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 25),
               Text(
                 'EMAIL',
                 style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
                     color: Colors.black54),
               ),
+              SizedBox(height: 5),
               Text(
                 email,
                 style: TextStyle(
                     fontSize: 25,
-                    color: Colors.deepPurple,
+                    color: Colors.black,
                     fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 40),
+              SizedBox(height: 30),
               RaisedButton(
                 onPressed: () {
                   signOutGoogle();
@@ -86,7 +83,7 @@ class FirstScreen extends StatelessWidget {
                     return LoginPage();
                   }), ModalRoute.withName('/'));
                 },
-                color: Colors.purple[200],
+                color: Colors.grey,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
@@ -99,25 +96,6 @@ class FirstScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(40)),
               ),
               SizedBox(height: 40),
-              // RaisedButton(
-              //   onPressed: () {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(builder: (context) => Home()),
-              //     );
-              //   },
-              //   color: Colors.deepPurple,
-              //   child: Padding(
-              //     padding: const EdgeInsets.all(8.0),
-              //     child: Text(
-              //       'Home',
-              //       style: TextStyle(fontSize: 25, color: Colors.white),
-              //     ),
-              //   ),
-              //   elevation: 5,
-              //   shape: RoundedRectangleBorder(
-              //       borderRadius: BorderRadius.circular(40)),
-              // ),
             ],
           ),
         ),

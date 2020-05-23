@@ -13,18 +13,18 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: new AppBar(
         title: new Text('TravelME'),
-        backgroundColor: Colors.purple,
+        backgroundColor: Colors.green[900],
       ),
       body: Container(
-        color: Colors.purple[100],
+        color: Colors.white,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new Padding(padding: EdgeInsets.only(top: 50.0)),
-                      new Text('TravelME',
-                      style: new TextStyle(color: Colors.purple, fontSize: 30.0),),
+                      new Text('Welcome to TravelME',
+                      style: new TextStyle(color: Colors.green[800] , fontSize: 35.0,fontWeight: FontWeight.bold),),
                       new Padding(padding: EdgeInsets.only(top: 50.0)),
               //FlutterLogo(size: 150),
               Image(image: AssetImage("assets/Logo.png"), height: 200, width: 200,),
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
       highlightElevation: 0,
-      borderSide: BorderSide(color: Colors.grey),
+      borderSide: BorderSide(color: Colors.green),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
         child: Row(
@@ -67,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                 'Sign in with Google',
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.grey,
+                  color: Colors.green,
                 ),
               ),
             )

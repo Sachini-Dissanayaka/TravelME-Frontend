@@ -1,50 +1,18 @@
 import 'package:flutter/material.dart';
-import 'AddTrip.dart';
 import 'package:getflutter/getflutter.dart';
-import 'package:map_launcher/map_launcher.dart';
-import 'package:unicorndial/unicorndial.dart';
-import 'NearHotel.dart';
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
+import 'HeadOne.dart';
+import 'Trip.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'first_screen.dart';
 import 'home.dart';
-import 'HeadOne.dart';
-import 'hotel.dart';
+import 'package:map_launcher/map_launcher.dart';
 
-List hotels;
-
-class PlanTrip extends StatefulWidget {
+class NearHotel extends StatefulWidget {
   @override
-  _PlanTripState createState() => _PlanTripState();
+  _NearHotelState createState() => _NearHotelState();
 }
 
-class _PlanTripState extends State<PlanTrip> {
-  String _place;
-  String _lat;
-  String _lng;
-
-  Future _makeHotelRequest() async {
-    http.Response response = await http.post(
-      'https://noderestapp.azurewebsites.net/nearestHotels',
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=utf-8',
-      },
-      body: jsonEncode(
-          <String, String>{'place': _place, 'lat': _lat, 'lng': _lng}),
-    );
-    if (response.statusCode == 200) {
-      hotels = json.decode(response.body);
-      setState(() {
-        hotels = hotels;
-      });
-      debugPrint(hotels.toString());
-    } else {
-      throw Exception('Failed to create Trip.');
-    }
-  }
-
+class _NearHotelState extends State<NearHotel> {
   final String phone = 'tel:+2347012345678';
 
   _callPhone() async {
@@ -66,46 +34,15 @@ class _PlanTripState extends State<PlanTrip> {
 
   @override
   Widget build(BuildContext context) {
-    var childButtons = List<UnicornButton>();
-
-    childButtons.add(UnicornButton(
-        hasLabel: true,
-        labelText: "Find Hotels",
-        labelBackgroundColor: Colors.black,
-        labelColor: Colors.white,
-        currentButton: FloatingActionButton(
-          heroTag: "hotel",
-          backgroundColor: Colors.black,
-          mini: true,
-          child: Icon(Icons.hotel),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Hotel()),
-            );
-          },
-        )));
-
-    childButtons.add(UnicornButton(
-        hasLabel: true,
-        labelText: "Find Cabs",
-        labelBackgroundColor: Colors.black,
-        labelColor: Colors.white,
-        currentButton: FloatingActionButton(
-          heroTag: "cab",
-          backgroundColor: Colors.black,
-          mini: true,
-          child: Icon(Icons.directions_car),
-          onPressed: () {},
-        )));
     return Scaffold(
       appBar: new AppBar(
-        title: new Text('TravelMe'),
+        title: new Text('Hotels Around You'),
         backgroundColor: Colors.green[900],
       ),
       body: ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           return Card(
+            color: Colors.green[50],
             elevation: 5,
             child: Stack(
               children: <Widget>[
@@ -127,7 +64,7 @@ class _PlanTripState extends State<PlanTrip> {
                                     GFAvatar(
                                       size: 100.0,
                                       backgroundImage:
-                                          NetworkImage(userData[index]["img"]),
+                                          NetworkImage(hotels[index]["img"]),
                                       shape: GFAvatarShape.standard,
                                     ),
                                     SizedBox(width: 20),
@@ -136,39 +73,29 @@ class _PlanTripState extends State<PlanTrip> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
+                                            GestureDetector(
+                                                child: Text("${hotels[index]["name"]}",
+                                                    style: TextStyle(
+                                                        decoration:
+                                                            TextDecoration
+                                                                .underline,
+                                                        color: Colors.black,fontSize: 22,fontWeight: FontWeight.bold)),
+                                                onTap: () {
+                                                 launch("${hotels[index]["hotelUrl"]}");
+                                                }),
                                             Text(
-                                              "${userData[index]["placeName"]}",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold),
-                                            ),
-                                            Text(
-                                              "\nStart Time  ${userData[index]["startTimeH"]}:${userData[index]["startTimeM"]}",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.grey.shade800),
-                                              maxLines: 10,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              "End Time  ${userData[index]["endTimeH"]}:${userData[index]["endTimeM"]}",
+                                              "\n${hotels[index]["address"]}",
                                               style: TextStyle(
                                                   fontSize: 17,
-                                                  color: Colors.grey.shade800),
-                                              maxLines: 10,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            Text(
-                                              "Day ${userData[index]["day"]}",
-                                              style: TextStyle(
-                                                  fontSize: 17,
-                                                  color: Colors.grey.shade800),
+                                                  color: Colors.grey.shade600),
                                               maxLines: 10,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             IconButton(
-                                              icon: Icon(Icons.place,
-                                                  color: Colors.red[900]),
+                                              icon: Icon(
+                                                Icons.place,
+                                                color: Colors.red[900],
+                                              ),
                                               onPressed: () async {
                                                 if (await MapLauncher
                                                     .isMapAvailable(
@@ -176,61 +103,20 @@ class _PlanTripState extends State<PlanTrip> {
                                                   await MapLauncher.launchMap(
                                                     mapType: MapType.google,
                                                     coords: Coords(
-                                                        userData[index]["lat"],
-                                                        userData[index]["lng"]),
+                                                        hotels[index]["lat"],
+                                                        hotels[index]["lng"]),
                                                     title:
-                                                        "${userData[index]["placeName"]}",
+                                                        "${hotels[index]["name"]}",
                                                     description:
-                                                        "${userData[index]["bestReview"]}",
+                                                        "${hotels[index]["address"]}",
                                                   );
                                                 }
                                               },
-                                            )
+                                            ),
                                           ]),
                                     )
                                   ],
-                                ),
-                                SizedBox(height: 10),
-                                if (index < userData.length - 1 && userData[index]["day"] !=userData[index + 1]["day"])
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(Icons.hotel),
-                                      SizedBox(width: 20),
-                                      GestureDetector(
-                                          child: Text("Find a Hotel",
-                                              style: TextStyle(
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  color: Colors.blue[700],
-                                                  fontSize: 17)),
-                                          onTap: () {
-                                            _place =
-                                                "${userData[index]["placeName"]}";
-                                            _lat = "${userData[index]["lat"]}";
-                                            _lng = "${userData[index]["lng"]}";
-                                            _makeHotelRequest();
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      NearHotel()),
-                                            );
-                                          })
-                                    ],
-                                  ),
-                                SizedBox(height: 10),
-                                if (index < userData.length - 1)
-                                  Row(
-                                    children: <Widget>[
-                                      Icon(Icons.directions_car),
-                                      SizedBox(width: 20),
-                                      Text(
-                                          "distance: ${distance[index]["distance"]}km\nTime: ${distance[index]["time"]}min",
-                                          style: TextStyle(
-                                              fontSize: 17,
-                                              color: Colors.black)),
-                                    ]
-                                  ),
+                                )
                               ],
                             )),
                       ],
@@ -239,15 +125,8 @@ class _PlanTripState extends State<PlanTrip> {
             ),
           );
         },
-        itemCount: data == null ? 0 : userData.length,
+        itemCount: hotels == null ? 0 : hotels.length,
         //   //body: displayImage(),
-      ),
-      floatingActionButton: UnicornDialer(
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-        parentButtonBackground: Colors.green[900],
-        orientation: UnicornOrientation.VERTICAL,
-        parentButton: Icon(Icons.search),
-        childButtons: childButtons,
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

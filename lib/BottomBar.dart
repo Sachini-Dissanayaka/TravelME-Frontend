@@ -1,17 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:http/http.dart' as http;
+import 'package:getflutter/getflutter.dart';
+import 'dart:async';
 import 'HeadOne.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'first_screen.dart';
 import 'home.dart';
-import 'package:map_launcher/map_launcher.dart';
+import 'first_screen.dart';
 
-class Hotel extends StatefulWidget {
+class BottomBar extends StatefulWidget {
   @override
-  _HotelState createState() => _HotelState();
+  _BottomBarState createState() => _BottomBarState();
 }
 
-class _HotelState extends State<Hotel> {
+class _BottomBarState extends State<BottomBar> {
   final String phone = 'tel:+2347012345678';
 
   _callPhone() async {
@@ -34,71 +36,6 @@ class _HotelState extends State<Hotel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: new AppBar(
-        title: new Text('Hotels'),
-        backgroundColor: Colors.green[900],
-      ),
-      body: ListView.builder(
-          scrollDirection: Axis.vertical,
-          itemCount: allHotels == null ? 0 : allHotels.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              child: Card(
-                  color: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    side: BorderSide(color: Colors.black, width: 1),
-                    borderRadius: BorderRadius.circular(1),
-                  ),
-                  child: Wrap(
-                    children: <Widget>[
-                      Image.network(allHotels[index]["img"]),
-                      SizedBox(height: 40),
-                      Row(
-                        children: <Widget>[
-                          GestureDetector(
-                              child: Text("${allHotels[index]["name"]}",
-                                  style: TextStyle(
-                                      decoration: TextDecoration.underline,
-                                      color: Colors.black,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold),
-                                    maxLines: 10,
-                                    overflow: TextOverflow.ellipsis),
-                              onTap: () {
-                                launch("${allHotels[index]["hotelUrl"]}");
-                              }),
-                          SizedBox(width: 30),
-                          IconButton(
-                            icon: Icon(
-                              Icons.place,
-                              color: Colors.red[900],
-                            ),
-                            onPressed: () async {
-                              if (await MapLauncher.isMapAvailable(
-                                  MapType.google)) {
-                                await MapLauncher.launchMap(
-                                  mapType: MapType.google,
-                                  coords: Coords(allHotels[index]["lat"],
-                                      allHotels[index]["lng"]),
-                                  title: "${allHotels[index]["name"]}",
-                                  description: "${allHotels[index]["address"]}",
-                                );
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 30),
-                      Text(
-                        "${allHotels[index]["address"]}",
-                        style: TextStyle(color: Colors.black87, fontSize: 17),
-                      ),
-                      SizedBox(height: 40),
-                    ],
-                  )),
-            );
-          } //body: displayImage(),
-          ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -234,37 +171,6 @@ class _HotelState extends State<Hotel> {
         shape: CircularNotchedRectangle(),
         color: Colors.white,
       ),
-    );
-  }
-}
-
-class CitiesService {
-  static final List<String> cities = [
-    'Polonnaruwa',
-    'Anuradhapura',
-    'Kandy',
-    'Colombo',
-    'Matara',
-    'Galle',
-    'Hambantota',
-    'Puttalam',
-    'Sigiriya',
-    'Kurunegala',
-    'Kalutara',
-    'Jaffna',
-    'Trincomalee',
-    'Pinnawala',
-    'Gampaha',
-    'Nuwara Eliya',
-    'Badulla',
-    'Mannar'
-  ];
-
-  static List<String> getSuggestions(String query) {
-    List<String> matches = List();
-    matches.addAll(cities);
-
-    matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
-    return matches;
+       );
   }
 }

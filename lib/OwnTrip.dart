@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:unicorndial/unicorndial.dart';
-import 'hotel.dart';
-import 'travel_agency.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -10,13 +7,10 @@ import 'HeadOne.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'first_screen.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'AddReview.dart';
+import 'home.dart';
+import 'package:map_launcher/map_launcher.dart';
+import 'Trip.dart';
 import 'sign_in.dart';
-import 'Help.dart';
-
-Map myTripsData;
-List myTrips;
-
 
 class CityFieldValidator {
   static String validate(String value) {
@@ -24,66 +18,52 @@ class CityFieldValidator {
   }
 }
 
-class Home extends StatefulWidget {
+class OwnTrip extends StatefulWidget {
   @override
-  _HomeState createState() => _HomeState();
+  _OwnTripState createState() => _OwnTripState();
 }
 
-class _HomeState extends State<Home> {
+class _OwnTripState extends State<OwnTrip> {
   final TextEditingController _typeAheadController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  Map ownData;
+  List ownUserData;
+  List ownDistance;
   String _selectedCity;
-  Map data;
-  List userData;
-  Map nearPlacesData;
   List nearPlaces;
-  List allHotels;
- 
-  Future getMyTrips() async {
-    http.Response response =
-        await http.get('https://noderestapp.azurewebsites.net/myTrips/$email');
-    myTripsData = json.decode(response.body);
-    setState(() {
-      myTrips = myTripsData["trips"];
-    });
-    debugPrint(myTrips.toString());
-  }
+  List _selectedPlaces = [];
 
-
-  Future getHotels() async {
-    http.Response response = await http.get(
-        'https://noderestapp.azurewebsites.net/searchHotel/$_selectedCity');
-    allHotels = json.decode(response.body);
-    setState(() {
-      allHotels = allHotels;
-    });
-    debugPrint(allHotels.toString());
+  Future _makePostRequest() async {
+    http.Response response = await http.post(
+      'https://noderestapp.azurewebsites.net/customTripPlan',
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: jsonEncode(<String, dynamic>{
+        "places": _selectedPlaces,
+        "email":email
+      }),
+    );
+    if (response.statusCode == 200) {
+      ownData = json.decode(response.body);
+      setState(() {
+        ownUserData = ownData["trip"];
+        ownDistance = ownData["distances"];
+      });
+      debugPrint(ownUserData.toString());
+    } else {
+      throw Exception('Failed to create Trip.');
+    }
   }
 
   Future getNearPlaces() async {
-    http.Response response = await http.get(
-        'https://noderestapp.azurewebsites.net/crawlNearestPlaces/$_selectedCity');
-    nearPlacesData = json.decode(response.body);
+    http.Response response = await http
+        .get('https://noderestapp.azurewebsites.net/getPlace/$_selectedCity');
+    nearPlaces = json.decode(response.body);
     setState(() {
-      nearPlaces = nearPlacesData["places"];
+      nearPlaces = nearPlaces;
     });
     debugPrint(nearPlaces.toString());
-  }
-
-  Future getData() async {
-    http.Response response =
-        await http.get('https://noderestapp.azurewebsites.net/bestPlaces');
-    data = json.decode(response.body);
-    setState(() {
-      userData = data["bestPlaces"];
-    });
-    debugPrint(userData.toString());
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    getData();
   }
 
   final String phone = 'tel:+2347012345678';
@@ -107,47 +87,35 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    var childButtons = List<UnicornButton>();
-    childButtons.add(UnicornButton(
-        hasLabel: true,
-        labelText: "Write Review",
-        labelBackgroundColor: Colors.black,
-        labelColor: Colors.white,
-        currentButton: FloatingActionButton(
-          heroTag: "review",
-          backgroundColor: Colors.black,
-          mini: true,
-          child: Icon(Icons.create),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddReview()),
-            );
-          },
-        )));
-
-    childButtons.add(UnicornButton(
-        hasLabel: true,
-        labelText: "Create a Trip",
-        labelBackgroundColor: Colors.black,
-        labelColor: Colors.white,
-        currentButton: FloatingActionButton(
-          heroTag: "trip",
-          backgroundColor: Colors.black,
-          mini: true,
-          child: Icon(Icons.favorite_border),
-          onPressed: () {
-            getMyTrips();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => NavTrip()),
-            );
-          },
-        )));
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async{
+          _makePostRequest();
+          await new Future.delayed(const Duration(seconds: 10));
+          if (this._selectedPlaces.length > 1) {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => PlanTrip(
+                      ownData, ownUserData, ownDistance, _selectedCity),
+                ));
+          } else {
+            final snackBar = SnackBar(
+              content: Text('Please select at least two places!'),
+              action: SnackBarAction(
+                label: 'Undo',
+                onPressed: () {},
+              ),
+            );
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+        },
+        child: Icon(Icons.navigation),
+        backgroundColor: Colors.green[800],
+      ),
       body: Builder(
         builder: (context) => Container(
-            color: Colors.white,
+            color: Colors.green[50],
             child: SingleChildScrollView(
                 child: Column(children: [
               Form(
@@ -158,7 +126,7 @@ class _HomeState extends State<Home> {
                     alignment: Alignment.center,
                     child: new Stack(alignment: Alignment.center, children: <
                         Widget>[
-                      Image.asset('assets/wall1.jpg',
+                      Image.asset('assets/wall2.jpg',
                           width: 700, height: 240, fit: BoxFit.cover),
                       Container(
                           alignment: Alignment.center,
@@ -166,7 +134,6 @@ class _HomeState extends State<Home> {
                           child: Column(children: [
                             new Padding(padding: EdgeInsets.only(top: 100.0)),
                             TypeAheadFormField(
-                              key: Key("searchCity"),
                               textFieldConfiguration: TextFieldConfiguration(
                                 controller: this._typeAheadController,
                                 decoration: new InputDecoration(
@@ -211,13 +178,11 @@ class _HomeState extends State<Home> {
                             ),
                             SizedBox(height: 20),
                             RaisedButton(
-                              key: Key("search"),
                               onPressed: () {
                                 if (this._formKey.currentState.validate()) {
                                   this._formKey.currentState.save();
                                   this._selectedCity =
                                       this._typeAheadController.text;
-                                  getHotels();
                                   getNearPlaces();
                                 }
                               },
@@ -234,77 +199,18 @@ class _HomeState extends State<Home> {
                     ]),
                   )),
               SizedBox(height: 20),
-              Table(border: TableBorder.all(color: Colors.black54), children: [
-                TableRow(children: [
-                  new FlatButton(
-                    color: Colors.white,
-                    onPressed: () {
-                      if (this._selectedCity != null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Hotel(allHotels)),
-                        );
-                      } else {
-                        final snackBar = SnackBar(
-                          content: Text('Please enter a city!'),
-                          action: SnackBarAction(
-                            label: 'Undo',
-                            onPressed: () {},
-                          ),
-                        );
-                        Scaffold.of(context).showSnackBar(snackBar);
-                      }
-                    },
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      children: <Widget>[
-                        Icon(Icons.hotel),
-                        SizedBox(height: 10),
-                        Text("Hotels",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20))
-                      ],
-                    ),
-                  ),
-                  new FlatButton(
-                    color: Colors.white,
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => Help()),
-                        );
-                    },
-                    padding: EdgeInsets.all(10.0),
-                    child: Column(
-                      children: <Widget>[
-                        Icon(Icons.help),
-                        SizedBox(height: 10),
-                        Text("Help",
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 20))
-                      ],
-                    ),
-                  ),
-                ]),
-              ]),
-              SizedBox(height: 20),
-
               if (this._selectedCity != null)
                 Text(
-                  "Near Places",
+                  "Places Around You",
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               if (this._selectedCity != null)
                 Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.0),
-                  height: 260,
+                  margin: EdgeInsets.symmetric(vertical: 40.0),
+                  height: 400,
                   child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: nearPlacesData == null ? 0 : nearPlaces.length,
+                      itemCount: nearPlaces == null ? 0 : nearPlaces.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Container(
                           width: 180.0,
@@ -316,68 +222,70 @@ class _HomeState extends State<Home> {
                               ),
                               child: Wrap(
                                 children: <Widget>[
-                                  Image.network(nearPlaces[index]["img"]),
+                                  Stack(
+                                      alignment: Alignment.topLeft,
+                                      children: <Widget>[
+                                        Image.network(nearPlaces[index]["img"]),
+                                        Container(
+                                          alignment: Alignment.topLeft,
+                                          child: Column(children: [
+                                            new Padding(
+                                                padding:
+                                                    EdgeInsets.only(top: 1.0)),
+                                            Ink(
+                                              decoration: const ShapeDecoration(
+                                                color: Colors.black,
+                                                shape: CircleBorder(),
+                                              ),
+                                              child: IconButton(
+                                                icon: Icon(Icons.star),
+                                                color: Colors.red,
+                                                highlightColor: Colors.black,
+                                                onPressed: () {
+                                                  _selectedPlaces.add(
+                                                      "${nearPlaces[index]["placeId"]}");
+                                                },
+                                              ),
+                                            ),
+                                            //IconButton(icon: Icon(Icons.favorite,color: Colors.white,), onPressed: null)
+                                          ]),
+                                        ),
+                                      ]),
                                   ListTile(
                                       title: Text(
-                                        "${nearPlaces[index]["place_name"]}",
+                                        "${nearPlaces[index]["placeName"]}",
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold),
                                       ),
                                       subtitle: Text(
-                                        "${nearPlaces[index]["no_of_reviews"]}",
+                                        "${nearPlaces[index]["bestReview"]}",
                                         style: TextStyle(color: Colors.black54),
                                       )),
+                                  IconButton(
+                                    icon: Icon(Icons.place,
+                                        color: Colors.red[900]),
+                                    onPressed: () async {
+                                      if (await MapLauncher.isMapAvailable(
+                                          MapType.google)) {
+                                        await MapLauncher.launchMap(
+                                          mapType: MapType.google,
+                                          coords: Coords(
+                                              nearPlaces[index]["lat"],
+                                              nearPlaces[index]["lng"]),
+                                          title:
+                                              "${nearPlaces[index]["placeName"]}",
+                                          description:
+                                              "${nearPlaces[index]["bestReview"]}",
+                                        );
+                                      }
+                                    },
+                                  )
                                 ],
                               )),
                         );
                       }),
                 ),
-
-              Text(
-                "Most Popular Places",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(vertical: 20.0),
-                height: 260,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: data == null ? 0 : userData.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        width: 180.0,
-                        child: Card(
-                            color: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              side: BorderSide(color: Colors.black, width: 1),
-                              borderRadius: BorderRadius.circular(1),
-                            ),
-                            child: Wrap(
-                              children: <Widget>[
-                                Image.network(userData[index]["img"]),
-                                ListTile(
-                                    title: Text(
-                                      "${userData[index]["place"]}",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    subtitle: Text(
-                                      "${userData[index]["description"]}",
-                                      style: TextStyle(color: Colors.black54),
-                                    )),
-                              ],
-                            )),
-                      );
-                    }),
-              ),
             ]))),
-      ),
-      floatingActionButton: UnicornDialer(
-        backgroundColor: Color.fromRGBO(255, 255, 255, 0.6),
-        parentButtonBackground: Colors.green[900],
-        orientation: UnicornOrientation.VERTICAL,
-        parentButton: Icon(Icons.add),
-        childButtons: childButtons,
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
@@ -445,7 +353,6 @@ class _HomeState extends State<Home> {
                   type: MaterialType.transparency,
                   child: InkWell(
                     onTap: () {
-                      getMyTrips();
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => NavTrip()),

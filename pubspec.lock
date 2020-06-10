@@ -494,7 +494,7 @@ packages:
       name: process
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.12"
+    version: "3.0.13"
   pub_semver:
     dependency: transitive
     description:
@@ -633,6 +633,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.3.4"
+  twinkle_button:
+    dependency: "direct main"
+    description:
+      name: twinkle_button
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.3"
   typed_data:
     dependency: transitive
     description:

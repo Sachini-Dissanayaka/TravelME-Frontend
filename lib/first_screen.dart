@@ -2,8 +2,8 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'login_page.dart';
 import 'sign_in.dart';
-import 'HeadOne.dart';
 import 'home.dart';
+
 
 class FirstScreen extends StatelessWidget {
   @override
@@ -14,6 +14,7 @@ class FirstScreen extends StatelessWidget {
         backgroundColor: Colors.green[900],
       ),
       floatingActionButton: FloatingActionButton(
+        key: Key("floatingButton"),
         onPressed: () {
           Navigator.push(
             context,
@@ -96,6 +97,14 @@ class FirstScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(40)),
               ),
               SizedBox(height: 40),
+              // RaisedButton(
+              //   key: Key('signOut'),
+              //   onPressed: (){
+              //       Navigator.push(
+              //           context,
+              //           MaterialPageRoute(builder: (context) => LoginPage()),
+              // );
+              //   })
             ],
           ),
         ),

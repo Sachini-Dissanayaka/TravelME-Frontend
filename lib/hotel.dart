@@ -7,12 +7,18 @@ import 'home.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 class Hotel extends StatefulWidget {
+  List allHotels;
+  Hotel(this.allHotels);
   @override
-  _HotelState createState() => _HotelState();
+  _HotelState createState(){ 
+    return _HotelState(this.allHotels);
+  }
 }
 
 class _HotelState extends State<Hotel> {
   final String phone = 'tel:+2347012345678';
+  List allHotels;
+  _HotelState(this.allHotels);
 
   _callPhone() async {
     if (await canLaunch(phone)) {

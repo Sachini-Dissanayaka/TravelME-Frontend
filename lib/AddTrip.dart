@@ -7,22 +7,24 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'Trip.dart';
+import 'package:twinkle_button/twinkle_button.dart';
+import 'OwnTrip.dart';
+import 'sign_in.dart';
 
-Map data;
-List userData;
-List distance;
 String city;
 
-class CityFieldValidator{
-  static String validate(String value){
+class CityFieldValidator {
+  static String validate(String value) {
     return value.isEmpty ? 'City can\'t be empty' : null;
   }
 }
-class DayFieldValidator{
-  static String validate(String value){
+
+class DayFieldValidator {
+  static String validate(String value) {
     return value.isEmpty ? 'Number of days can\'t be empty' : null;
   }
 }
+
 class AddTrip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,9 @@ class MyformState extends State<Myform> {
   final TextEditingController _typeAheadController1 = TextEditingController();
   String _selectedCity;
   String _days;
+  Map data;
+  List userData;
+  List distance;
 
   Future _makePostRequest() async {
     http.Response response = await http.post(
@@ -54,6 +59,7 @@ class MyformState extends State<Myform> {
       body: jsonEncode(<String, String>{
         'place': _selectedCity,
         'days': _days,
+        'email': email,
       }),
     );
     if (response.statusCode == 200) {
@@ -136,9 +142,7 @@ class MyformState extends State<Myform> {
               onSuggestionSelected: (suggestion) {
                 this._typeAheadController.text = suggestion;
               },
-              
               validator: CityFieldValidator.validate,
-
               onSaved: (value) => this._selectedCity = value,
             ),
             SizedBox(height: 20),
@@ -176,23 +180,24 @@ class MyformState extends State<Myform> {
                 onSuggestionSelected: (suggestion) {
                   this._typeAheadController1.text = suggestion;
                 },
-                
                 validator: DayFieldValidator.validate,
-
                 onSaved: (value) => this._days = value),
             SizedBox(height: 20),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async {
                 if (this._formKey.currentState.validate()) {
                   this._formKey.currentState.save();
-                  city= this._selectedCity;
+                  city = this._selectedCity;
+                  _makePostRequest();
                   Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text(
                           'Trip to ${this._selectedCity} for ${this._days} days')));
-                  _makePostRequest();
+                  await new Future.delayed(const Duration(seconds: 10));
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => PlanTrip()),
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            PlanTrip(data, userData, distance, _selectedCity)),
                   );
                 }
               },
@@ -208,6 +213,23 @@ class MyformState extends State<Myform> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(40)),
             ),
+            SizedBox(height: 25),
+            TwinkleButton(
+                buttonTitle: Text(
+                  'Create Your Own Trip',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w300,
+                    fontSize: 17.0,
+                  ),
+                ),
+                buttonColor: Colors.red,
+                onclickButtonFunction: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => OwnTrip()),
+                  );
+                }),
           ]))),
     );
   }

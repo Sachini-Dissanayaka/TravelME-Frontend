@@ -30,6 +30,18 @@ class _LoginPageState extends State<LoginPage> {
               Image(image: AssetImage("assets/Logo.png"), height: 200, width: 200,),
               SizedBox(height: 50),
               _signInButton(),
+              // SizedBox(height:30),
+              // RaisedButton(
+              //   key: Key('anonymous'),
+              //   onPressed:(){
+              //     name = "Sachini";
+              //     email = "dmsachiniacc@gmail.com";
+              //     imageUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fin.pinterest.com%2Fheenashaikhonline11%2Fcute-baby-girl%2F&psig=AOvVaw36PmQOdH_Sw-OmbJcw1aAS&ust=1591893777142000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCKChycrY9-kCFQAAAAAdAAAAABAD";
+              //   Navigator.push(
+              //           context,
+              //           MaterialPageRoute(builder: (context) => FirstScreen()),
+              // );
+              // })
             ],
           ),
         ),

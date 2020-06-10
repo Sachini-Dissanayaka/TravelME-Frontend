@@ -211,6 +211,8 @@ class MyformState extends State<Myform> {
   String _city;
   String _review;
   String _name;
+  String _status;
+  Map _response;
 
   Future _makePostRequest() async {
     http.Response response = await http.post(
@@ -225,14 +227,13 @@ class MyformState extends State<Myform> {
       }),
     );
     if (response.statusCode == 200) {
-      // data = json.decode(response.body);
-      // setState(() {
-      //   userData = data["trip"];
-      //   distance = data["distances"];
-      // });
-      // debugPrint(userData.toString());
+      _response = json.decode(response.body);
+      setState(() {
+        _status = _response["STATUS"];
+      });
+      debugPrint(_status.toString());
     } else {
-      throw Exception('Failed to create Trip.');
+      throw Exception('Failed to Add Review.');
     }
   }
 
@@ -350,9 +351,11 @@ class MyformState extends State<Myform> {
               onPressed: () {
                 if (this._formKey.currentState.validate()) {
                   this._formKey.currentState.save();
-                  Scaffold.of(context).showSnackBar(SnackBar(
+                   _makePostRequest();
+                   if(_status=="OK"){
+                     Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text('Your review is added successfully')));
-                  // _makePostRequest();
+                   }
                   // Navigator.push(
                   //   context,
                   //   MaterialPageRoute(builder: (context) => PlanTrip()),
@@ -363,7 +366,7 @@ class MyformState extends State<Myform> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  'Start',
+                  'Submit',
                   style: TextStyle(fontSize: 25, color: Colors.white),
                 ),
               ),

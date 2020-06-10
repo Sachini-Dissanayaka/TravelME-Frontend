@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:getflutter/getflutter.dart';
 import 'HeadOne.dart';
-import 'Trip.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'first_screen.dart';
 import 'home.dart';
 import 'package:map_launcher/map_launcher.dart';
 
+
 class NearHotel extends StatefulWidget {
+  List hotels;
+  NearHotel(this.hotels);
   @override
-  _NearHotelState createState() => _NearHotelState();
+  _NearHotelState createState(){ 
+    return _NearHotelState(this.hotels);
+  }
 }
 
 class _NearHotelState extends State<NearHotel> {
   final String phone = 'tel:+2347012345678';
+  List hotels;
+  _NearHotelState(this.hotels);
+ 
 
   _callPhone() async {
     if (await canLaunch(phone)) {

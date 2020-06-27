@@ -4,7 +4,6 @@ import 'login_page.dart';
 import 'sign_in.dart';
 import 'home.dart';
 
-
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,10 @@ class FirstScreen extends StatelessWidget {
             children: <Widget>[
               new Text(
                 'My Profile',
-                style: new TextStyle(color: Colors.green, fontSize: 35.0,fontWeight: FontWeight.bold),
+                style: new TextStyle(
+                    color: Colors.green,
+                    fontSize: 35.0,
+                    fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 40),
               CircleAvatar(
@@ -96,7 +98,8 @@ class FirstScreen extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(40)),
               ),
-              SizedBox(height: 40),
+              //This section for integration testing
+              // SizedBox(height: 40),
               // RaisedButton(
               //   key: Key('signOut'),
               //   onPressed: (){

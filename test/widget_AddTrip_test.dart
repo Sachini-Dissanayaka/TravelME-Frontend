@@ -34,20 +34,6 @@ void main() {
     expect(find.byType(OutlineButton), findsOneWidget);
     expect(find.text('Sign in with Google'), findsOneWidget);
   });
-  // testWidgets('First screen UI test', (WidgetTester tester) async {
-  //   await tester.pumpWidget(
-  //     MaterialApp(
-  //       home: Scaffold(
-  //         body: FirstScreen(),     
-  //       ),
-  //     )
-  //   );
-  //   expect(find.byType(FirstScreen), findsOneWidget);
-  //   //expect(find.byType(FloatingActionButton), findsOneWidget);
-  //   //expect(find.text("My Profile"),findsOneWidget);
-  //   //expect(find.text("NAME"),findsOneWidget);
-  //   //expect(find.text("EMAIL"),findsOneWidget);
-  //   expect(find.byType(RaisedButton), findsOneWidget);
-  // });
+  
  
 }

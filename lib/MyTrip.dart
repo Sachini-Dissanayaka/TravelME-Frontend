@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'HeadOne.dart';
 import 'home.dart';
 
 class MyTrip extends StatelessWidget {
@@ -27,8 +26,9 @@ class MyTrip extends StatelessWidget {
                               children: <Widget>[
                                 Row(
                                   children: [
-                                    Icon(Icons.place,color: Colors.red[900],size: 30),
-                                    SizedBox(width:30),
+                                    Icon(Icons.place,
+                                        color: Colors.red[900], size: 30),
+                                    SizedBox(width: 30),
                                     Text(
                                       "${myTrips[index]["topic"]}",
                                       style: TextStyle(
@@ -46,7 +46,6 @@ class MyTrip extends StatelessWidget {
           );
         },
         itemCount: myTripsData == null ? 0 : myTrips.length,
-        //   //body: displayImage(),
       ),
     );
   }

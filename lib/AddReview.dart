@@ -348,18 +348,15 @@ class MyformState extends State<Myform> {
             ),
             SizedBox(height: 20),
             RaisedButton(
-              onPressed: () {
+              onPressed: () async{
                 if (this._formKey.currentState.validate()) {
                   this._formKey.currentState.save();
                    _makePostRequest();
+                   await new Future.delayed(const Duration(seconds: 5));
                    if(_status=="OK"){
                      Scaffold.of(context).showSnackBar(SnackBar(
                       content: Text('Your review is added successfully')));
                    }
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => PlanTrip()),
-                  // );
                 }
               },
               color: Colors.green[900],

@@ -103,7 +103,7 @@ class _HotelState extends State<Hotel> {
                     ],
                   )),
             );
-          } //body: displayImage(),
+          } 
           ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

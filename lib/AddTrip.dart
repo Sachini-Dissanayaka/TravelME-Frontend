@@ -9,7 +9,6 @@ import 'dart:convert';
 import 'Trip.dart';
 import 'package:twinkle_button/twinkle_button.dart';
 import 'OwnTrip.dart';
-import 'sign_in.dart';
 
 String city;
 
@@ -112,6 +111,7 @@ class MyformState extends State<Myform> {
             ),
             new Padding(padding: EdgeInsets.only(top: 30.0)),
             new TypeAheadFormField(
+              key: Key("TripCity"),
               textFieldConfiguration: TextFieldConfiguration(
                 controller: this._typeAheadController,
                 decoration: new InputDecoration(
@@ -147,6 +147,7 @@ class MyformState extends State<Myform> {
             ),
             SizedBox(height: 20),
             new TypeAheadFormField(
+                key: Key("TripDays"),
                 textFieldConfiguration: TextFieldConfiguration(
                     controller: this._typeAheadController1,
                     decoration: new InputDecoration(
@@ -184,6 +185,7 @@ class MyformState extends State<Myform> {
                 onSaved: (value) => this._days = value),
             SizedBox(height: 20),
             RaisedButton(
+              key: Key("TripStartButton"),
               onPressed: () async {
                 if (this._formKey.currentState.validate()) {
                   this._formKey.currentState.save();

@@ -39,10 +39,8 @@ class _OwnTripState extends State<OwnTrip> {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=utf-8',
       },
-      body: jsonEncode(<String, dynamic>{
-        "places": _selectedPlaces,
-        "email":email
-      }),
+      body: jsonEncode(
+          <String, dynamic>{"places": _selectedPlaces, "email": email}),
     );
     if (response.statusCode == 200) {
       ownData = json.decode(response.body);
@@ -89,7 +87,7 @@ class _OwnTripState extends State<OwnTrip> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        onPressed: () async{
+        onPressed: () async {
           _makePostRequest();
           await new Future.delayed(const Duration(seconds: 10));
           if (this._selectedPlaces.length > 1) {
@@ -247,7 +245,6 @@ class _OwnTripState extends State<OwnTrip> {
                                                 },
                                               ),
                                             ),
-                                            //IconButton(icon: Icon(Icons.favorite,color: Colors.white,), onPressed: null)
                                           ]),
                                         ),
                                       ]),

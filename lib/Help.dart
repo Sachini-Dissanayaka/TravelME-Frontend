@@ -130,7 +130,6 @@ class Help extends StatelessWidget {
               'assets/create.JPG',
               width: 50,
               height: 100,
-              //fit: BoxFit.cover,
             ),
             create,
             SizedBox(height: 20),

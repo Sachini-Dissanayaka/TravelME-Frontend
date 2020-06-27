@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'hotel.dart';
-import 'travel_agency.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
@@ -16,7 +15,6 @@ import 'Help.dart';
 
 Map myTripsData;
 List myTrips;
-
 
 class CityFieldValidator {
   static String validate(String value) {
@@ -444,6 +442,7 @@ class _HomeState extends State<Home> {
                 child: Material(
                   type: MaterialType.transparency,
                   child: InkWell(
+                    key: Key("directTrip"),
                     onTap: () {
                       getMyTrips();
                       Navigator.push(
@@ -525,8 +524,8 @@ class CitiesService {
     'Anuradhapura',
     'Kandy',
     'Colombo',
-    'Matara',
     'Galle',
+    'Matara',
     'Hambantota',
     'Puttalam',
     'Sigiriya',

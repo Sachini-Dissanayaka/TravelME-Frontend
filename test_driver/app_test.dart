@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:test/test.dart';
 import 'package:flutter_driver/flutter_driver.dart';
 
@@ -53,16 +51,52 @@ void main() {
       await driver.tap(floatingButton);
     });
 
-    // test("Search city", () async{
-    //   final cityFieldFinder = find.byValueKey('searchCity');
-    //   final searchButtonFinder = find.byValueKey('search');
-    //   await driver.waitFor(cityFieldFinder);
-    //   await driver.tap(cityFieldFinder);
-    //   await driver.enterText('Galle');
-    //   await driver.waitFor(find.text('Galle'));
-    //   await driver.waitFor(searchButtonFinder);
-    //   await driver.tap(searchButtonFinder);
-    //   await delay(10000);
-    // });
+    test("Search city", () async{
+      var cityFieldFinder = find.byValueKey('searchCity');
+      var searchButtonFinder = find.byValueKey('search');
+      await driver.waitFor(cityFieldFinder);
+      await driver.tap(cityFieldFinder);
+      await driver.enterText('Galle');
+      await driver.waitFor(find.text('Galle'));
+      await driver.waitFor(searchButtonFinder);
+      await driver.tap(searchButtonFinder);
+      await delay(10000);
+    });
+
+    test('Navigate to trip page',()async{
+      final inkWell = find.byValueKey('directTrip');
+      await driver.waitFor(inkWell);
+      await delay(10000);
+      await driver.tap(inkWell);
+      await delay(10000);
+    });
+
+    test("Plan Trip", () async{
+      final tripCityFinder = find.byValueKey('TripCity');
+      final tripDaysFinder = find.byValueKey('TripDays');
+      final startButtonFinder = find.byValueKey('TripStartButton');
+
+      await driver.waitFor(tripCityFinder);
+      await driver.tap(tripCityFinder);
+      await driver.enterText('Galle');
+      await driver.waitFor(find.text('Galle'));
+
+      await driver.waitFor(tripDaysFinder);
+      await driver.tap(tripDaysFinder);
+      await driver.enterText('2');
+      await driver.waitFor(find.text('2'));
+
+      await driver.waitFor(startButtonFinder);
+      await driver.tap(startButtonFinder);
+      await delay(10000);
+    });
+
+    test("View Hotels",() async{
+      final hotelfloatingButton = find.byValueKey('findHotels');
+      await driver.waitFor(hotelfloatingButton);
+      await delay(10000);
+      await driver.tap(hotelfloatingButton);
+    });
+
   });
 }

@@ -6,12 +6,11 @@ import 'first_screen.dart';
 import 'home.dart';
 import 'package:map_launcher/map_launcher.dart';
 
-
 class NearHotel extends StatefulWidget {
   List hotels;
   NearHotel(this.hotels);
   @override
-  _NearHotelState createState(){ 
+  _NearHotelState createState() {
     return _NearHotelState(this.hotels);
   }
 }
@@ -20,7 +19,6 @@ class _NearHotelState extends State<NearHotel> {
   final String phone = 'tel:+2347012345678';
   List hotels;
   _NearHotelState(this.hotels);
- 
 
   _callPhone() async {
     if (await canLaunch(phone)) {
@@ -81,14 +79,19 @@ class _NearHotelState extends State<NearHotel> {
                                               CrossAxisAlignment.start,
                                           children: <Widget>[
                                             GestureDetector(
-                                                child: Text("${hotels[index]["name"]}",
+                                                child: Text(
+                                                    "${hotels[index]["name"]}",
                                                     style: TextStyle(
                                                         decoration:
                                                             TextDecoration
                                                                 .underline,
-                                                        color: Colors.black,fontSize: 22,fontWeight: FontWeight.bold)),
+                                                        color: Colors.black,
+                                                        fontSize: 22,
+                                                        fontWeight:
+                                                            FontWeight.bold)),
                                                 onTap: () {
-                                                 launch("${hotels[index]["hotelUrl"]}");
+                                                  launch(
+                                                      "${hotels[index]["hotelUrl"]}");
                                                 }),
                                             Text(
                                               "\n${hotels[index]["address"]}",
@@ -133,7 +136,6 @@ class _NearHotelState extends State<NearHotel> {
           );
         },
         itemCount: hotels == null ? 0 : hotels.length,
-        //   //body: displayImage(),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Row(

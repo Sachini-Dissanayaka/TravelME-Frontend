@@ -26,10 +26,10 @@ class _LoginPageState extends State<LoginPage> {
                       new Text('Welcome to TravelME',
                       style: new TextStyle(color: Colors.green[800] , fontSize: 35.0,fontWeight: FontWeight.bold),),
                       new Padding(padding: EdgeInsets.only(top: 50.0)),
-              //FlutterLogo(size: 150),
               Image(image: AssetImage("assets/Logo.png"), height: 200, width: 200,),
               SizedBox(height: 50),
               _signInButton(),
+              //This section for integration testing
               // SizedBox(height:30),
               // RaisedButton(
               //   key: Key('anonymous'),
@@ -42,6 +42,7 @@ class _LoginPageState extends State<LoginPage> {
               //           MaterialPageRoute(builder: (context) => FirstScreen()),
               // );
               // })
+              
             ],
           ),
         ),

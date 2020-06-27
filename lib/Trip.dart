@@ -109,13 +109,14 @@ class _PlanTripState extends State<PlanTrip> {
         labelBackgroundColor: Colors.black,
         labelColor: Colors.white,
         currentButton: FloatingActionButton(
+          key: Key("findHotels"),
           heroTag: "hotel",
           backgroundColor: Colors.black,
           mini: true,
           child: Icon(Icons.hotel),
-          onPressed: () async{
+          onPressed: () async {
             getAllHotels();
-            await new Future.delayed(const Duration(seconds: 10));
+            await new Future.delayed(const Duration(seconds: 8));
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Hotel(allHotels)),
@@ -237,7 +238,7 @@ class _PlanTripState extends State<PlanTrip> {
                                                         .underline,
                                                     color: Colors.blue[700],
                                                     fontSize: 17)),
-                                            onTap: () async{
+                                            onTap: () async {
                                               _place =
                                                   "${userData[index]["placeName"]}";
                                               _lat =
@@ -245,7 +246,8 @@ class _PlanTripState extends State<PlanTrip> {
                                               _lng =
                                                   "${userData[index]["lng"]}";
                                               _makeHotelRequest();
-                                              await new Future.delayed(const Duration(seconds: 10));
+                                              await new Future.delayed(
+                                                  const Duration(seconds: 6));
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -275,7 +277,6 @@ class _PlanTripState extends State<PlanTrip> {
             );
           },
           itemCount: data == null ? 0 : userData.length,
-          //   //body: displayImage(),
         ),
         onRefresh: refreshList,
       ),
